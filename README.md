@@ -1,63 +1,63 @@
-# DevSync: Secure AI Project Collaborator
-**Date: April 12, 2026**
+# DevSync
 
-## 🌟 Overview
-DevSync is a premium, AI-powered platform designed for developers to find high-impact collaborators for open-source and private projects. By leveraging **Google Gemini AI**, the platform moves beyond simple keyword Matching to analyze developer expertise through **GitHub Activity** and skill sets.
+**An AI-assisted platform that matches developers with projects, based on their real GitHub activity.**
 
-## 🚀 Recent Architectural Updates
-- **Role-First Onboarding**: Complete UI overhaul replacing generic login screens with a luxurious, glassmorphism role-selector (Developer vs Project Manager).
-- **Native OAuth Flow**: Removed Firebase UI in favor of native Google Sign-In and GitHub OAuth token interception via Chrome Custom Tabs.
-- **Dedicated Python Backend (FastAPI)**: Successfully spun off heavy processing to a local Python server (`localhost:8000`).
-- **Instant Algorithmic GitHub Profiling**: Replaced slow GenAI constraints with a blazing-fast Python algorithmic engine that instantly reads GitHub metadata to dictate Seniority, compute Top Programming Languages, and construct automated professional Bios in milliseconds.
+DevSync was the capstone project of the Cross-Platform Mobile track at the **Digital Egypt Pioneers Initiative (DEPI, MCIT)**, May – Jul 2026, built by a **5-member team led by [Amr Elsherif](https://github.com/amrelsherif-eng)**.
 
-## 🤖 Core AI Implementation (Prompt Engineering)
-The platform features a sophisticated AI-driven discovery engine:
-- **Expertise Matching**: Uses a refined Gemini-1.5-flash prompt that evaluates a developer's real-world expertise by analyzing their **GitHub Repository activity**, top languages, and public contributions.
-- **Feedback-Driven Optimization**: Implements a dedicated **Feedback Loop** where users can rate the accuracy of AI matches. This data is logged to evaluate and optimize prompt performance over time.
-- **Project Proposal Architect**: An AI assistant that helps owners structure their projects into professional JSON-based proposals.
+![Flutter](https://img.shields.io/badge/Flutter-02569B?style=flat-square&logo=flutter&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat-square&logo=firebase&logoColor=black)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)
+![GitHub API](https://img.shields.io/badge/GitHub_API-181717?style=flat-square&logo=github&logoColor=white)
 
-## 🔐 Technical Architecture & Security
-- **Authentication**: Implements **Firebase UI Auth** for a multi-platform, secure sign-in experience supporting:
-  - **Google OAuth**: One-tap secure login.
-  - **Email/Password**: Traditional secure authentication.
-- **Security model**: Adheres to the Android software stack security model, utilizing `proguard` for **Code Obfuscation** and strict **Runtime Permission Management** via `permission_handler`.
-- **FCM Integration**: Leverages **Firebase Cloud Messaging** (FCM) to deliver real-time collaboration alerts and project updates directly to user devices.
+![DevSync infographic](Project%20Infographic.png)
 
-## 🎭 Advanced UI & UX
-- **Glassmorphism Design**: A modern, premium aesthetic using soft gradients, translucent cards, and high-fidelity blur effects.
-- **Advanced Animations**: 
-  - **Implicit Animations**: Smooth transitions between app states.
-  - **Tween & Transition Widgets**: Custom `TweenAnimationBuilder` implementations for glowing network effects and fluid content entry (Advanced Networking Experience).
-  - Built with `flutter_animate` for high-performance micro-interactions.
+## What it does
 
-## 📦 Deployment & Flavors
-The project is architected for production-grade deployment:
-- **Build Flavors**: Configured with multiple `productFlavors` in Gradle:
-  - `free`: Basic matching and project limits.
-  - `pro`: Unlimited AI matching and advanced discovery features.
-- **Code Protection**: Uses **R8/ProGuard obfuscation** to protect intellectual property before being released as an **Android App Bundle (.aab)**.
+- **Two roles:** developers find projects; project owners publish projects and find developers.
+- **GitHub-based profiles:** a developer's languages and activity are read from the GitHub API to build their skill profile.
+- **Match ranking:** owners get developers ranked by how well they fit a project, from "Perfect Match" to "Weak Match".
+- **AI assistant:** an in-app chat that helps owners shape an idea into a project proposal and helps developers explore projects. It calls an LLM API (Groq, Llama 3.3 70B, in the current code; Google Gemini in earlier versions).
+- **Notifications:** Firebase Cloud Messaging for invitations and project updates.
 
-## 📂 Project Structure
+## Tech stack
+
+| Layer | Tools |
+|---|---|
+| App | Flutter, Dart, GetX (state, routing, DI), Dio, flutter_animate |
+| Firebase | Auth (Google Sign-In), Cloud Firestore, Cloud Messaging, Remote Config, Analytics, Cloud Functions |
+| Matching service | Python, FastAPI (`/analyze`, `/matches/calculate`) in `python_backend/` |
+| External APIs | GitHub REST API, Groq / Gemini LLM APIs |
+
+## Project structure
+
 ```text
 lib/
-├── app/          # Routes (GetX) and Flavor configs
-├── core/         # Premium Theme, Constants, Strings
-├── data/
-│   ├── models/   # Project, User, and Invitation models
-│   ├── providers/# Firebase Firestore & Auth providers
-│   └── services/ # AI (Gemini), GitHub, FCM, and Analytics
-├── presentation/
-│   ├── modules/  # Feature-based architecture (Auth, Dashboard, Projects)
-│   └── widgets/  # Custom UI (GlassCard, Advanced Animations)
-└── main.dart     # Multi-platform entry point
+├── app/            # Routes
+├── core/           # Theme, constants
+├── data/           # Models, Firebase + GitHub providers, services (AI, FCM, analytics, Remote Config)
+├── flavors/        # Build flavor config
+└── presentation/   # Feature modules (auth, dashboards, matches, projects, AI chat) + shared widgets
+python_backend/     # FastAPI matching service
+functions/          # Firebase Cloud Functions (GitHub token exchange)
+docs/               # Architecture notes
 ```
 
-## 🛠 Tech Stack
-- **Framework**: Flutter (Dart)
-- **Local Backend API**: Python 3.12+ (FastAPI, Uvicorn, Pydantic)
-- **Cloud Backend**: Firebase (Auth, Firestore, Messaging, Analytics, Remote Config)
-- **Analytics**: Real-time event tracking and role-selection logging.
-- **State Management**: GetX (Performance & Navigation)
+Architecture notes are in [`docs/`](docs/).
 
----
-*Developed with focus on Android Software Stack security and modern AI architecture.*
+## Run it locally
+
+```bash
+flutter pub get
+flutter run
+
+# matching service
+cd python_backend
+pip install -r requirements.txt
+uvicorn main:app --reload --port 8000
+```
+
+You need your own Firebase project (`flutterfire configure`), and API keys set in Firebase Remote Config, not in code.
+
+## Team
+
+5-member DEPI team. Team lead: Amr Elsherif.
